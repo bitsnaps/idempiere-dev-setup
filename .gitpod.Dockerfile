@@ -5,7 +5,7 @@ FROM gitpod/workspace-full:latest
 ENV TRIGGER_REBUILD=1
 
 # Get rid of apt warnings:
-RUN sudo apt-get update && apt-get install -y --no-install-recommends apt-utils
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends apt-utils
 
 # Install PostgreSQL
 RUN sudo install-packages postgresql-12 postgresql-contrib-12
