@@ -5,10 +5,10 @@ FROM gitpod/workspace-full:latest
 ENV TRIGGER_REBUILD=1
 
 # Install PostgreSQL
-RUN sudo install-packages postgresql-9.6 postgresql-contrib-9.6
+RUN sudo install-packages postgresql-12 postgresql-contrib-12
 
 # Setup PostgreSQL server for user gitpod
-ENV PATH="$PATH:/usr/lib/postgresql/9.6/bin"
+ENV PATH="$PATH:/usr/lib/postgresql/12/bin"
 ENV PGDATA="/workspace/.pgsql/data"
 
 RUN mkdir -p ~/.pg_ctl/bin ~/.pg_ctl/sockets \
