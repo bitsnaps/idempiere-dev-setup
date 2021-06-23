@@ -1,4 +1,5 @@
 FROM gitpod/workspace-full:latest
+# May use the image "workspace-postgres", see example: https://github.com/manuelabarca/boilerplate_postgresql
 
 # Docker build does not rebuild an image when a base image is changed, increase this counter to trigger it.
 ENV TRIGGER_REBUILD=1
