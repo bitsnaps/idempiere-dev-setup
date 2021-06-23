@@ -1,5 +1,5 @@
 CREATE_DOCKER_POSTGRES=false
-DOCKER_POSTGRES_NAME=${DOCKER_POSTGRES_NAME:-postgres}
+DOCKER_POSTGRES_NAME=${DOCKER_POSTGRES_NAME:-gitpod}
 LOAD_IDEMPIERE_ENV=false
 SETUP_DB=true
 CLONE_BRANCH=false
@@ -14,7 +14,7 @@ DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-5432}
 DB_USER=${DB_USER:-adempiere}
 DB_PASS=${DB_PASS:-adempiere}
-DB_SYSTEM=${DB_SYSTEM:-postgres}
+DB_SYSTEM=${DB_SYSTEM:-gitpod}
 ECLIPSE=${ECLIPSE:-eclipse}
 MIGRATE_EXISTING_DATABASE=${MIGRATE_EXISTING_DATABASE:-true}
 
@@ -178,6 +178,7 @@ if [ ! -d $IDEMPIERE_SOURCE_FOLDER ]; then
 else
 	git -C $IDEMPIERE_SOURCE_FOLDER pull
 fi
+# This can be automated through SDKMAN (in gitpod just run: `sdk selfupdate && sdk install groovy 3.0.7`)
 if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
 	echo
 	echo "*** Download groovy ***"
