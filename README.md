@@ -1,5 +1,7 @@
 # Linux script to setup new iDempiere Development environment
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/bitsnaps/idempiere-dev-setup)
+
 ## Pre-requisite
 * JDK11
 * Maven

@@ -1,0 +1,24 @@
+# idempiere install
+image:
+  file: .gitpod.Dockerfile
+
+# exposed ports
+ports:
+- port: 5432
+  onOpen: ignore
+# - port: 8080
+#   onOpen: ignore
+
+# start up tasks
+tasks:
+  # init: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
+  - init: |
+      pg_ctl status
+      pg_start
+      createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
+      psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
+      psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
+      sudo service postgresql restart
+    command: |
+      pg_stop
+  - command: pg_ctl status
