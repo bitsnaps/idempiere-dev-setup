@@ -24,7 +24,7 @@ tasks:
       pg_ctl restart
     command: |
       chmod +x setup.sh
-      ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere
+      ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-user=gitpod
       cd idempiere
       export IDEMPIERE_REPOSITORY=$(pwd)
       echo $IDEMPIERE_REPOSITORY

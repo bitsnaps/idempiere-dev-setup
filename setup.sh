@@ -15,7 +15,8 @@ DB_PORT=${DB_PORT:-5432}
 DB_USER=${DB_USER:-adempiere}
 DB_PASS=${DB_PASS:-adempiere}
 DB_SYSTEM=${DB_SYSTEM:-postgres}
-DB_PG_USER=${DB_PG_USER:-gitpod}
+DB_PG_NAME=${DB_PG_NAME:-postgres}
+DB_PG_USER=${DB_PG_USER:-postgres}
 ECLIPSE=${ECLIPSE:-eclipse}
 MIGRATE_EXISTING_DATABASE=${MIGRATE_EXISTING_DATABASE:-true}
 
@@ -41,6 +42,10 @@ do
     echo -e "\tSet idempiere database user password (default is adempiere)"
     echo -e "  --db-admin-pass=<database server administrator password>"
     echo -e "\tSet database administrator password (default is postgres)"
+    echo -e "  --db-pg-name=<database name postgres>"
+    echo -e "\tSet database name postgres (default is postgres)"
+    echo -e "  --db-pg-user=<database PostgreSQL user>"
+    echo -e "\tSet database PostgreSQL user (default is postgres)"
     echo -e "  --http-host=<host ip>"
     echo -e "\tSet http address/ip to listen to (default is 0.0.0.0, i.e all available address)"
     echo -e "  --http-port=<http port>"
@@ -98,6 +103,14 @@ do
     ;;
     --db-admin-pass=*)
     DB_SYSTEM="${i#*=}"
+    shift # past argument=value
+    ;;
+    --db-pg-name=*)
+    DB_PG_NAME="${i#*=}"
+    shift # past argument=value
+    ;;
+    --db-pg-user=*)
+    DB_PG_USER="${i#*=}"
     shift # past argument=value
     ;;
     --http-host=*)
@@ -251,5 +264,5 @@ fi
 
 if [ "$SETUP_DB" = true ] ; then
 	./setup-db.sh --source="$IDEMPIERE_SOURCE_FOLDER" --db-name=$DB_NAME --db-host=$DB_HOST --db-port=$DB_PORT --db-user=$DB_USER --db-pass=$DB_PASS \
-		--db-admin-pass=$DB_SYSTEM --db-pg-name=$DB_SYSTEM --db-pg-user=$DB_PG_USER --http-host=$IDEMPIERE_HOST --http-port=$IDEMPIERE_PORT --https-port=$IDEMPIERE_SSL_PORT --run-migration-script=$MIGRATE_EXISTING_DATABASE
+		--db-admin-pass=$DB_SYSTEM --db-pg-name=$DB_PG_NAME --db-pg-user=$DB_PG_USER --http-host=$IDEMPIERE_HOST --http-port=$IDEMPIERE_PORT --https-port=$IDEMPIERE_SSL_PORT --run-migration-script=$MIGRATE_EXISTING_DATABASE
 fi
