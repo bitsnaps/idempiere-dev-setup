@@ -4,6 +4,9 @@ FROM gitpod/workspace-full:latest
 # Docker build does not rebuild an image when a base image is changed, increase this counter to trigger it.
 ENV TRIGGER_REBUILD=1
 
+# Get rid of apt warnings:
+RUN sudo apt-get update && apt-get install -y --no-install-recommends apt-utils
+
 # Install PostgreSQL
 RUN sudo install-packages postgresql-12 postgresql-contrib-12
 
