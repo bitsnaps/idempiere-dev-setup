@@ -4,14 +4,16 @@ image:
 
 # exposed ports
 ports:
-- port: 5432
+- port: 5432 # PostgreSQL
   onOpen: ignore
-# - port: 8080
-#   onOpen: ignore
+- port: 8080 # Web
+  onOpen: ignore
+- port: 8443 # SSL
+  onOpen: ignore
 
-# start up tasks: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
+# Start up tasks:
 tasks:
-  # Here we use "gitpod" instead of the default "postgres" user
+  # Will be executed one time when creating a workspace, command: will be excuted each time you open workspace
   - init: |
       psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
@@ -23,5 +25,12 @@ tasks:
       ./setup.sh --depth=1 --branch=release-8.2
       cd idempiere
       mvn verify -U
+      export IDEMPIERE_REPOSITORY=$(pwd)
+      echo $IDEMPIERE_REPOSITORY
+      cd /tmp
+      jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
+      psql -d idempiere -U adempiere -f Adempiere_pg.dmp
+      cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
+# P.S. Here we use "gitpod" instead of the default "postgres" user
 
   - command: pg_ctl status

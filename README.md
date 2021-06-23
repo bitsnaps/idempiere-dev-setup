@@ -6,7 +6,8 @@
 * JDK11
 * Maven
 * Git
-* Docker (optionl)
+* PostgreSQL 12
+* Docker (optional)
 
 ## Usage
 * Clone or download to a folder
