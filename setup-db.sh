@@ -11,6 +11,8 @@ IDEMPIERE_SSL_PORT=${IDEMPIERE_SSL_PORT:-8443}
 DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-5432}
 DB_NAME=${DB_NAME:-idempiere}
+DB_PG_NAME=${DB_PG_NAME:-postgres}
+DB_PG_USER=${DB_PG_USER:-postgres}
 DB_USER=${DB_USER:-adempiere}
 DB_PASS=${DB_PASS:-adempiere}
 DB_SYSTEM=${DB_SYSTEM:-postgres}
@@ -64,6 +66,14 @@ do
     DB_SYSTEM="${i#*=}"
     shift # past argument=value
     ;;
+    --db-pg-name=*)
+    DB_PG_NAME="${i#*=}"
+    shift # past argument=value
+    ;;
+    --db-pg-user=*)
+    DB_PG_USER="${i#*=}"
+    shift # past argument=value
+    ;;
     --source=*)
     IDEMPIERE_SOURCE_FOLDER="${i#*=}"
     shift # past argument=value
@@ -99,6 +109,10 @@ do
     echo -e "\tSet idempiere database user password (default is adempiere)"
     echo -e "  --db-admin-pass=<database server administrator password>"
     echo -e "\tSet database administrator password (default is postgres)"
+    echo -e "  --db-pg-name=<database postgres name>"
+    echo -e "\tSet database postgres name (default is postgres)"
+    echo -e "  --db-pg-user=<database postgres user>"
+    echo -e "\tSet database postgres user (default is postgres)"
     echo -e "  --http-host=<host ip>"
     echo -e "\tSet http address/ip to listen to (default is 0.0.0.0, i.e all available address)"
     echo -e "  --http-port=<http port>"
@@ -119,7 +133,7 @@ do
     esac
 done
 
-if ! PGPASSWORD=$DB_SYSTEM psql -h $DB_HOST -p $DB_PORT -U $DB_SYSTEM -d $DB_SYSTEM -c "\q" > /dev/null 2>&1 ; then
+if ! PGPASSWORD=$DB_SYSTEM psql -h $DB_HOST -p $DB_PORT -U $DB_PG_USER -d $DB_PG_NAME -c "\q" > /dev/null 2>&1 ; then
 	if ! PGPASSWORD=$DB_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "\q" > /dev/null 2>&1 ; then
 		echo "Bad postgres admin password and couldn't connect to idempiere database $DB_NAME using the provided credential.";
 		echo "Please fix the db credential parameters and rerun the setup script or set up the connection properties file manually after completion of the script."

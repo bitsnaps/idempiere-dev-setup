@@ -15,6 +15,7 @@ DB_PORT=${DB_PORT:-5432}
 DB_USER=${DB_USER:-adempiere}
 DB_PASS=${DB_PASS:-adempiere}
 DB_SYSTEM=${DB_SYSTEM:-postgres}
+DB_PG_USER=${DB_PG_USER:-gitpod}
 ECLIPSE=${ECLIPSE:-eclipse}
 MIGRATE_EXISTING_DATABASE=${MIGRATE_EXISTING_DATABASE:-true}
 
@@ -250,5 +251,5 @@ fi
 
 if [ "$SETUP_DB" = true ] ; then
 	./setup-db.sh --source="$IDEMPIERE_SOURCE_FOLDER" --db-name=$DB_NAME --db-host=$DB_HOST --db-port=$DB_PORT --db-user=$DB_USER --db-pass=$DB_PASS \
-		--db-admin-pass=$DB_SYSTEM --http-host=$IDEMPIERE_HOST --http-port=$IDEMPIERE_PORT --https-port=$IDEMPIERE_SSL_PORT --run-migration-script=$MIGRATE_EXISTING_DATABASE
+		--db-admin-pass=$DB_SYSTEM --db-pg-name=$DB_SYSTEM --db-pg-user=$DB_PG_USER --http-host=$IDEMPIERE_HOST --http-port=$IDEMPIERE_PORT --https-port=$IDEMPIERE_SSL_PORT --run-migration-script=$MIGRATE_EXISTING_DATABASE
 fi
