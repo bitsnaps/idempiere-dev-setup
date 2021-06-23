@@ -20,5 +20,5 @@ tasks:
       pg_ctl restart
     command: |
       chmod +x ./setup.sh
-      ./setup.sh --branch=release-8.2
+      ./setup.sh --branch=release-8.2 --depth=1
   - command: pg_ctl status
