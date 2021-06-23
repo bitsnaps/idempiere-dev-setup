@@ -199,13 +199,13 @@ if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
   echo "*** Download groovy ***"
   echo
   wget https://archive.apache.org/dist/groovy/3.0.7/distribution/apache-groovy-binary-3.0.7.zip
-  unzip apache-groovy-binary-3.0.7.zip
+  unzip -qq apache-groovy-binary-3.0.7.zip
 fi
 if [ ! -d "groovy-3.0.7" ]; then
   echo
   echo "*** Extract Groovy ***"
   echo
-  unzip apache-groovy-binary-3.0.7.zip
+  unzip -qq apache-groovy-binary-3.0.7.zip
 fi
 
 if [ ! -f eclipse-jee-2021-06-R-linux-gtk-x86_64.tar.gz ]; then
@@ -218,7 +218,7 @@ if [ ! -d $ECLIPSE ]; then
 	echo
 	echo "*** Extract Eclipse ***"
 	echo
-	tar -xvf eclipse-jee-2021-06-R-linux-gtk-x86_64.tar.gz
+	tar -xf eclipse-jee-2021-06-R-linux-gtk-x86_64.tar.gz
 	ECLIPSE=eclipse
 fi
 
