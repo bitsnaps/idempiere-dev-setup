@@ -192,20 +192,26 @@ if [ ! -d $IDEMPIERE_SOURCE_FOLDER ]; then
 else
 	git -C $IDEMPIERE_SOURCE_FOLDER pull
 fi
-# This can be automated through SDKMAN (in gitpod just run: `sdk selfupdate && sdk install groovy 3.0.7`)
-if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
-	echo
-	echo "*** Download groovy ***"
-	echo
-	wget https://archive.apache.org/dist/groovy/3.0.7/distribution/apache-groovy-binary-3.0.7.zip
-	unzip apache-groovy-binary-3.0.7.zip
+
+# In case groovy has been installed with SDKMAN
+if ! command -v groovy &> /dev/null
+then
+  if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
+  	echo
+  	echo "*** Download groovy ***"
+  	echo
+  	wget https://archive.apache.org/dist/groovy/3.0.7/distribution/apache-groovy-binary-3.0.7.zip
+  	unzip apache-groovy-binary-3.0.7.zip
+  fi
+  if [ ! -d "groovy-3.0.7" ]; then
+  	echo
+  	echo "*** Extract Groovy ***"
+  	echo
+  	unzip apache-groovy-binary-3.0.7.zip
+  fi
 fi
-if [ ! -d "groovy-3.0.7" ]; then
-	echo
-	echo "*** Extract Groovy ***"
-	echo
-	unzip apache-groovy-binary-3.0.7.zip
-fi
+
+
 if [ ! -f eclipse-jee-2021-06-R-linux-gtk-x86_64.tar.gz ]; then
 	echo
 	echo "*** Download Eclipse ***"

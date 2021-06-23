@@ -22,6 +22,7 @@ tasks:
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
+      sdk install groovy 3.0.7 < /dev/null
     command: |
       chmod +x setup.sh
       ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-user=gitpod
