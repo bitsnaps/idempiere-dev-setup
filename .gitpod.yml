@@ -22,7 +22,6 @@ tasks:
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
-      sdk install groovy 3.0.7 < /dev/null
     command: |
       chmod +x setup.sh
       ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-user=gitpod
@@ -33,6 +32,5 @@ tasks:
       jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
       psql -d idempiere -U adempiere -f Adempiere_pg.dmp
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
-# P.S. we can install groovy using sdk like so: `sdk install groovy 3.0.7`
 
   - command: pg_ctl status

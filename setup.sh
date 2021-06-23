@@ -193,24 +193,20 @@ else
 	git -C $IDEMPIERE_SOURCE_FOLDER pull
 fi
 
-# In case groovy has been installed with SDKMAN
-if ! command -v groovy &> /dev/null
-then
-  if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
-  	echo
-  	echo "*** Download groovy ***"
-  	echo
-  	wget https://archive.apache.org/dist/groovy/3.0.7/distribution/apache-groovy-binary-3.0.7.zip
-  	unzip apache-groovy-binary-3.0.7.zip
-  fi
-  if [ ! -d "groovy-3.0.7" ]; then
-  	echo
-  	echo "*** Extract Groovy ***"
-  	echo
-  	unzip apache-groovy-binary-3.0.7.zip
-  fi
+# This will be used on eclipse for auto build (checkout: loadtargetplatform.xml)
+if [ ! -f apache-groovy-binary-3.0.7.zip ]; then
+  echo
+  echo "*** Download groovy ***"
+  echo
+  wget https://archive.apache.org/dist/groovy/3.0.7/distribution/apache-groovy-binary-3.0.7.zip
+  unzip apache-groovy-binary-3.0.7.zip
 fi
-
+if [ ! -d "groovy-3.0.7" ]; then
+  echo
+  echo "*** Extract Groovy ***"
+  echo
+  unzip apache-groovy-binary-3.0.7.zip
+fi
 
 if [ ! -f eclipse-jee-2021-06-R-linux-gtk-x86_64.tar.gz ]; then
 	echo
