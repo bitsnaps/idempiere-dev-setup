@@ -20,5 +20,8 @@ tasks:
       pg_ctl restart
     command: |
       chmod +x ./setup.sh
-      ./setup.sh --branch=release-8.2 --depth=1
+      ./setup.sh --depth=1 --branch=release-8.2
+      cd idempiere
+      mvn verify -U
+
   - command: pg_ctl status

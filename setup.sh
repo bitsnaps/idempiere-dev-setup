@@ -4,6 +4,7 @@ LOAD_IDEMPIERE_ENV=false
 SETUP_DB=true
 CLONE_BRANCH=false
 SOURCE_URL=https://github.com/idempiere/idempiere.git
+SOURCE_DEPTH=${SOURCE_DEPTH:-1}
 IDEMPIERE_SOURCE_FOLDER=${IDEMPIERE_SOURCE_FOLDER:-idempiere}
 IDEMPIERE_HOST=${IDEMPIERE_HOST:-0.0.0.0}
 IDEMPIERE_PORT=${IDEMPIERE_PORT:-8080}
@@ -56,6 +57,9 @@ do
     echo -e "  --branch=<branch name>"
     echo -e "\tCheckout branch instead of master"
     echo -e "  --repository-url=<git repository url>"
+    echo -e "  --depth=<depth>"
+    echo -e "\tCheckout source depth"
+    echo -e "  --repository-url=<git repository url>"
     echo -e "\tSet git repository URL to clone source from (default is $SOURCE_URL)"
     echo -e "  --skip-migration-script"
     echo -e "\tDo not run migration scripts against existing db (default will run)"
@@ -63,7 +67,7 @@ do
     echo -e "\tdisplay this help and exit"
     exit 0
     ;;
-	--create-docker-postgres) 
+	--create-docker-postgres)
 	CREATE_DOCKER_POSTGRES=true
 	shift
 	;;
@@ -94,7 +98,7 @@ do
     --db-admin-pass=*)
     DB_SYSTEM="${i#*=}"
     shift # past argument=value
-    ;;    
+    ;;
     --http-host=*)
     IDEMPIERE_HOST="${i#*=}"
     shift # past argument=value
@@ -107,7 +111,7 @@ do
     IDEMPIERE_SSL_PORT="${i#*=}"
     shift # past argument=value
     ;;
-	--load-idempiere-env) 
+	--load-idempiere-env)
 	LOAD_IDEMPIERE_ENV=true
 	shift
 	;;
@@ -119,11 +123,11 @@ do
     IDEMPIERE_SOURCE_FOLDER="${i#*=}"
     shift # past argument=value
     ;;
-	--skip-setup-db) 
+	--skip-setup-db)
 	SETUP_DB=false
 	shift
 	;;
-	--branch=*) 
+	--branch=*)
 	CLONE_BRANCH=true
         BRANCH_NAME="${i#*=}"
 	shift
@@ -167,10 +171,10 @@ if [ ! -d $IDEMPIERE_SOURCE_FOLDER ]; then
 	echo "*** Clone iDempiere ***"
 	echo
 	if [ "$CLONE_BRANCH" = true ] ; then
-		git clone --branch $BRANCH_NAME $SOURCE_URL $IDEMPIERE_SOURCE_FOLDER
+		git clone --depth $SOURCE_DEPTH --branch $BRANCH_NAME $SOURCE_URL $IDEMPIERE_SOURCE_FOLDER
 	else
-		git clone $SOURCE_URL $IDEMPIERE_SOURCE_FOLDER
-	fi	
+		git clone --depth $SOURCE_DEPTH $SOURCE_URL $IDEMPIERE_SOURCE_FOLDER
+	fi
 else
 	git -C $IDEMPIERE_SOURCE_FOLDER pull
 fi
@@ -232,9 +236,9 @@ if [ "$LOAD_IDEMPIERE_ENV" = true ] ; then
 	  while IFS='=' read -r key value
 	  do
 		key=$(echo $key | sed 's/^ADEMPIERE[_]//')
-		eval ${key}=\${value}    
+		eval ${key}=\${value}
 	  done < "$envFile"
-	  
+
 	  set
 	fi
 fi
