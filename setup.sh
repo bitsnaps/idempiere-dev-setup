@@ -210,7 +210,7 @@ echo
 echo "*** Run Maven Build ***"
 echo
 cd "$IDEMPIERE_SOURCE_FOLDER"
-mvn verify
+mvn verify -U
 
 cd ..
 ./setup-ws.sh --source="$IDEMPIERE_SOURCE_FOLDER"

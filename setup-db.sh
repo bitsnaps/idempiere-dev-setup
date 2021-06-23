@@ -119,7 +119,7 @@ do
     esac
 done
 
-if ! PGPASSWORD=$DB_SYSTEM psql -h $DB_HOST -p $DB_PORT -U postgres -d postgres -c "\q" > /dev/null 2>&1 ; then
+if ! PGPASSWORD=$DB_SYSTEM psql -h $DB_HOST -p $DB_PORT -U $DB_SYSTEM -d $DB_SYSTEM -c "\q" > /dev/null 2>&1 ; then
 	if ! PGPASSWORD=$DB_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "\q" > /dev/null 2>&1 ; then
 		echo "Bad postgres admin password and couldn't connect to idempiere database $DB_NAME using the provided credential.";
 		echo "Please fix the db credential parameters and rerun the setup script or set up the connection properties file manually after completion of the script."
@@ -131,7 +131,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [[ $IDEMPIERE_SOURCE_FOLDER == "/*" ]]; then
 	:
 else
-	IDEMPIERE_SOURCE_FOLDER="$DIR/$IDEMPIERE_SOURCE_FOLDER"	
+	IDEMPIERE_SOURCE_FOLDER="$DIR/$IDEMPIERE_SOURCE_FOLDER"
 fi
 
 CWD=$(pwd)
@@ -161,7 +161,7 @@ else
 		echo "MIGRATE_EXISTING_DATABASE is equal to 'false'. Skipping..."
 	fi
 fi
-    
+
 cd "$CWD"
 cp -r -f $PRODUCT_FOLDER/jettyhome $IDEMPIERE_SOURCE_FOLDER
 cp -f $PRODUCT_FOLDER/*.properties $IDEMPIERE_SOURCE_FOLDER

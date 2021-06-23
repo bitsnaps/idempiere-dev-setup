@@ -15,26 +15,23 @@ ports:
 tasks:
   # Will be executed one time when creating a workspace, command: will be excuted each time you open workspace
   - init: |
-      psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
+      sudo sed 's/peer/md5/g' /etc/postgresql/12/main/pg_hba.conf
+      pg_ctl restart
+      psql -U postgres -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
-      sdk selfupdate -y
-      sdk install groovy 3.0.7
     command: |
       chmod +x setup.sh
-      ./setup.sh --depth=1 --branch=release-8.2
+      ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere
       cd idempiere
-      mvn verify -U
       export IDEMPIERE_REPOSITORY=$(pwd)
       echo $IDEMPIERE_REPOSITORY
       cd /tmp
       jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
       psql -d idempiere -U adempiere -f Adempiere_pg.dmp
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
-      chmod +x console-setup.sh
-      ./console-setup.sh
-# P.S. Here we use "gitpod" instead of the default "postgres" user
+# P.S. we can install groovy using sdk like so: `sdk install groovy 3.0.7`
 
   - command: pg_ctl status
