@@ -24,6 +24,10 @@ tasks:
       pg_ctl restart
     command: |
       sleep 1
-      ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod --db-admin-pass=
+      ./setup.sh --depth=1 --branch=release-8.2 --skip-setup-db=true --skip-migration-script=true
+
+# If you want to use migration script and db script to auto setup idempiere database you may use this line instead of the one above:
+# ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod
+# P.S We'll skip those scripts for now, as they aren't stable enough!
 
   - command: pg_ctl status
