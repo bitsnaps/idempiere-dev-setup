@@ -16,11 +16,12 @@ tasks:
   # Will be executed one time when creating a workspace, command: will be excuted each time you open workspace
   - init: |
       sudo sed 's/peer/md5/g' /etc/postgresql/12/main/pg_hba.conf
+      pg_ctl reload
+      sleep 1
       psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
-      sleep 1
       pg_ctl restart
     command: |
       sleep 1
