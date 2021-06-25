@@ -38,8 +38,6 @@ tasks:
       cd ../..
       cd i8.2/postgresql
       cat *.sql | psql -U adempiere -d idempiere -q
-      cd ../../..
-      ./idempiere-server.sh
 
 # If you want to use migration script and db script to auto setup idempiere database you may use this line instead of the one above:
 # ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod
