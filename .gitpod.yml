@@ -27,6 +27,7 @@ tasks:
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
     command: |
+      sleep 1
       git clone https://github.com/idempiere/idempiere.git idempiere --branch release-8.2 --depth 1
       cd idempiere
       mvn verify -U
