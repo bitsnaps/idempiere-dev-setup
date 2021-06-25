@@ -18,6 +18,7 @@ tasks:
       sudo sed 's/peer/md5/g' /etc/postgresql/12/main/pg_hba.conf
       pg_ctl reload
       sleep 1
+      psql -U gitpod -c "CREATE ROLE postgres SUPERUSER LOGIN PASSWORD 'postgres'"
       psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
@@ -32,12 +33,9 @@ tasks:
       jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
       psql -d idempiere -U adempiere -f Adempiere_pg.dmp -q
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
-      ./console-setup.sh
-      cd migration/i8.1z/postgresql
-      cat *.sql | psql -U adempiere -d idempiere -q
-      cd ../..
-      cd i8.2/postgresql
-      cat *.sql | psql -U adempiere -d idempiere -q
+      printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
+      cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
 
 # If you want to use migration script and db script to auto setup idempiere database you may use this line instead of the one above:
 # ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod
