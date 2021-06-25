@@ -7,30 +7,55 @@ ports:
 - port: 5432 # PostgreSQL
   onOpen: ignore
 - port: 8080 # Web
-  onOpen: ignore
+  onOpen: open-preview
 - port: 8443 # SSL
+  onOpen: ignore
+- port: 5701
   onOpen: ignore
 
 # Start up tasks:
 tasks:
   # Will be executed one time when creating a workspace, command: will be excuted each time you open workspace
   - init: |
+      sudo sed 's/peer/md5/g' /etc/postgresql/12/main/pg_hba.conf
+      pg_ctl reload
+      sleep 1
+      psql -U gitpod -c "CREATE ROLE postgres SUPERUSER LOGIN PASSWORD 'postgres'"
       psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
     command: |
-      chmod +x ./setup.sh
-      ./setup.sh --depth=1 --branch=release-8.2
+      git clone https://github.com/idempiere/idempiere.git idempiere --branch release-8.2 --depth 1
       cd idempiere
       mvn verify -U
       export IDEMPIERE_REPOSITORY=$(pwd)
-      echo $IDEMPIERE_REPOSITORY
       cd /tmp
       jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
-      psql -d idempiere -U adempiere -f Adempiere_pg.dmp
+      psql -d idempiere -U adempiere -f Adempiere_pg.dmp -q
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
+      printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
+      cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      ./idempiere-server.sh
 # P.S. Here we use "gitpod" instead of the default "postgres" user
+  - command: gp await-port 8080 && gp preview $(gp url 8080)
+# Now it's possible to login to WebUI using: username: SuperUser, password: System
+
+
+
+      sleep 1
+      ./setup.sh --depth=1 --branch=release-8.2 --skip-setup-db --skip-migration-script
+      cd idempiere
+      export IDEMPIERE_REPOSITORY=$(pwd)
+      cd /tmp
+      jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
+      psql -d idempiere -U adempiere -f Adempiere_pg.dmp -q
+      cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
+      printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
+      cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      ./idempiere-server.sh
 
   - command: pg_ctl status
