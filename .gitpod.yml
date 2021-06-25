@@ -6,10 +6,10 @@ image:
 ports:
 - port: 5432 # PostgreSQL
   onOpen: ignore
-# - port: 8080 # Web
-#   onOpen: ignore
-# - port: 8443 # SSL
-#   onOpen: ignore
+- port: 8080 # Web
+  onOpen: open-preview
+- port: 8443 # SSL
+  onOpen: ignore
 
 # Start up tasks:
 tasks:
@@ -36,9 +36,10 @@ tasks:
       printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
       cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
       cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
+      ./idempiere-server.sh
 
 # If you want to use migration script and db script to auto setup idempiere database you may use this line instead of the one above:
 # ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod
 # P.S We'll skip those scripts for now, as they aren't stable enough!
 # Now it's possible to login via: `psql -U adempiere -d idempiere` with password `adempiere` or `psql -U gitpod -d postgres` with password `postgres`
-  - command: gp await-port 8080 && cd /workspace/idempiere-dev-setup/idempiere/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64 && ./idempiere-server.sh
+  - command: gp await-port 8080 && gp preview $(gp url 8080)
