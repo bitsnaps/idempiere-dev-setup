@@ -10,6 +10,8 @@ ports:
   onOpen: open-preview
 - port: 8443 # SSL
   onOpen: ignore
+- port: 5701 # SSL
+  onOpen: ignore
 
 # Start up tasks:
 tasks:
