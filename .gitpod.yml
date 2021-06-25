@@ -42,20 +42,3 @@ tasks:
 # P.S. Here we use "gitpod" instead of the default "postgres" user
   - command: gp await-port 8080 && gp preview $(gp url 8080)
 # Now it's possible to login to WebUI using: username: SuperUser, password: System
-
-
-
-      sleep 1
-      ./setup.sh --depth=1 --branch=release-8.2 --skip-setup-db --skip-migration-script
-      cd idempiere
-      export IDEMPIERE_REPOSITORY=$(pwd)
-      cd /tmp
-      jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
-      psql -d idempiere -U adempiere -f Adempiere_pg.dmp -q
-      cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
-      printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
-      cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
-      cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
-      ./idempiere-server.sh
-
-  - command: pg_ctl status
