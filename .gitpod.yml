@@ -32,6 +32,7 @@ tasks:
       jar xvf $IDEMPIERE_REPOSITORY/org.adempiere.server-feature/data/seed/Adempiere_pg.jar
       psql -d idempiere -U adempiere -f Adempiere_pg.dmp -q
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
+      ./console-setup.sh
       cd migration/i8.1z/postgresql
       cat *.sql | psql -U adempiere -d idempiere -q
       cd ../..
@@ -44,4 +45,4 @@ tasks:
 # ./setup.sh --depth=1 --branch=release-8.2 --db-name=idempiere --db-user=adempiere --db-pass=adempiere --db-pg-name=postgres --db-pg-user=gitpod
 # P.S We'll skip those scripts for now, as they aren't stable enough!
 # Now it's possible to login via: `psql -U adempiere -d idempiere` with password `adempiere` or `psql -U gitpod -d postgres` with password `postgres`
-  - command: gp await-port 8080
+  - command: gp await-port 8080 && cd /workspace/idempiere-dev-setup/idempiere/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64 && ./idempiere-server.sh
