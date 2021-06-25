@@ -18,16 +18,18 @@ tasks:
   # Will be executed one time when creating a workspace, command: will be excuted each time you open workspace
   - init: |
       sudo sed 's/peer/md5/g' /etc/postgresql/12/main/pg_hba.conf
-      sleep 1
+      sleep 2
       pg_ctl reload
+      sleep 2
       psql -U gitpod -c "CREATE ROLE postgres SUPERUSER LOGIN PASSWORD 'postgres'"
       psql -U gitpod -c "CREATE ROLE adempiere SUPERUSER LOGIN PASSWORD 'adempiere'"
       createdb --template=template0 -E UNICODE -O adempiere -U adempiere idempiere
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
+      sleep 2
     command: |
-      sleep 1
+      sleep 2
       git clone https://github.com/idempiere/idempiere.git idempiere --branch release-8.2 --depth 1
       cd idempiere
       mvn verify -U
