@@ -38,7 +38,7 @@ tasks:
       cd $IDEMPIERE_REPOSITORY/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
       cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
       cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
-      ./silent-setup.sh
+      printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
     command: |
       cd /workspace/idempiere-dev-setup/idempiere/org.idempiere.p2/target/products/org.adempiere.server.product/linux/gtk/x86_64
       ./idempiere-server.sh
