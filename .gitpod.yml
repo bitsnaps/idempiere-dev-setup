@@ -10,7 +10,7 @@ ports:
   onOpen: open-preview
 - port: 8443 # SSL
   onOpen: ignore
-- port: 5701 # SSL
+- port: 5701
   onOpen: ignore
 
 # Start up tasks:
@@ -26,7 +26,6 @@ tasks:
       psql -d idempiere -U adempiere -c "ALTER ROLE adempiere SET search_path TO adempiere, pg_catalog"
       psql -d idempiere -U adempiere -c 'CREATE EXTENSION "uuid-ossp"'
       pg_ctl restart
-    command: |
       sleep 1
       ./setup.sh --depth=1 --branch=release-8.2 --skip-setup-db --skip-migration-script
       cd idempiere
@@ -38,6 +37,8 @@ tasks:
       printf '\n\n\n\n\n\n\n\n\n\n\n\nY\n\n\n\n\n\n\n\n\n\n\n\n\n' | ./console-setup.sh
       cat migration/i8.1z/postgresql/*.sql | psql -U adempiere -d idempiere -q
       cat migration/i8.2/postgresql/*.sql | psql -U adempiere -d idempiere -q
+    command: |
+      cd idempiere
       ./idempiere-server.sh
 
 # If you want to use migration script and db script to auto setup idempiere database you may use this line instead of the one above:
